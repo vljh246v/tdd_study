@@ -92,4 +92,30 @@ class CalculatorServiceTest {
         assertEquals(result, Money.dollar(1));
 
     }
+
+    @Test
+    public void testMixedAddition(){
+        Expression fiveBucks = Money.dollar(5);
+        Expression tenFrances = Money.franc(10);
+
+        Bank bank = new Bank();
+        bank.addRate("CHF", "USD", 2);
+
+        Money result = bank.reduce(fiveBucks.plus(tenFrances), "USD");
+        assertEquals(Money.dollar(10), result);
+    }
+
+    @Test
+    public void testSumPlusMoney(){
+        Expression fiveBucks = Money.dollar(5);
+        Expression tenFrances = Money.franc(10);
+
+        Bank bank = new Bank();
+        bank.addRate("CHF", "USD", 2);
+
+        Expression sum = new Sum(fiveBucks, tenFrances).times(2);
+        Money result = bank.reduce(sum, "USD");
+        assertEquals(Money.dollar(20), result);
+    }
+
 }
